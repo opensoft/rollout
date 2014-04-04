@@ -122,7 +122,7 @@ class Feature
     }
 
     /**
-     * @param $group
+     * @param string $group
      */
     public function removeGroup($group)
     {
@@ -188,7 +188,7 @@ class Feature
 
     /**
      * @param RolloutUserInterface $user
-     * @return mixed
+     * @return boolean
      */
     private function isUserInActiveUsers(RolloutUserInterface $user)
     {
