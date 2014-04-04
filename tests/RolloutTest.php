@@ -139,7 +139,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
     {
         $this->rollout->activatePercentage('chat', 20);
 
-        $activated = [];
+        $activated = array();
         foreach (range(1, 120) as $id) {
             if ($this->rollout->isActive('chat', new User($id))) {
                 $activated[] = true;
@@ -155,7 +155,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
     {
         $this->rollout->activatePercentage('chat', 20);
 
-        $activated = [];
+        $activated = array();
         foreach (range(1, 200) as $id) {
             if ($this->rollout->isActive('chat', new User($id))) {
                 $activated[] = true;
@@ -171,7 +171,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
     {
         $this->rollout->activatePercentage('chat', 5);
 
-        $activated = [];
+        $activated = array();
         foreach (range(1, 100) as $id) {
             if ($this->rollout->isActive('chat', new User($id))) {
                 $activated[] = true;
