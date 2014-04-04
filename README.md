@@ -1,6 +1,8 @@
 rollout (for php)
 =================
 
+[![Build Status](https://travis-ci.org/opensoft/rollout.svg?branch=master)](https://travis-ci.org/opensoft/rollout)
+
 Feature flippers for PHP.  A port of ruby's [rollout](https://github.com/FetLife/rollout).
 
 Install It
