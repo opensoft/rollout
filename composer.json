@@ -1,0 +1,27 @@
+{
+    "name": "opensoft/rollout",
+    "description": "Feature flippers for PHP",
+    "keywords": ["feature", "flag", "toggle", "rollout", "flipper"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Richard Fullmer",
+            "email": "richard.fullmer@opensoftdev.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "suggest": {
+        "doctrine/cache": "For use with the DoctrineCacheStorageAdapter"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "doctrine/cache": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Opensoft\\Rollout\\": "src/"
+        }
+    }
+}
