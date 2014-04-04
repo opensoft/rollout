@@ -1,7 +1,7 @@
 rollout (for php)
 =================
 
-[![Build Status](https://travis-ci.org/opensoft/rollout.svg?branch=master)](https://travis-ci.org/opensoft/rollout)
+[![Build Status](https://travis-ci.org/opensoft/rollout.svg?branch=master)](https://travis-ci.org/opensoft/rollout) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/opensoft/rollout/badges/quality-score.png?s=a75edbc812e0b27279496e8f2f274f6a4c58dd9a)](https://scrutinizer-ci.com/g/opensoft/rollout/) [![Code Coverage](https://scrutinizer-ci.com/g/opensoft/rollout/badges/coverage.png?s=f2e7939ee89b8788df83bcc556aefedcf03cb6e4)](https://scrutinizer-ci.com/g/opensoft/rollout/)
 
 Feature flippers for PHP.  A port of ruby's [rollout](https://github.com/FetLife/rollout).
 
