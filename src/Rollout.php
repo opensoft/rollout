@@ -112,7 +112,7 @@ class Rollout
 
     /**
      * @param string $group
-     * @param callable $closure
+     * @param \Closure $closure
      */
     public function defineGroup($group, \Closure $closure)
     {
