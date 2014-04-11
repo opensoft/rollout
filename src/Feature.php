@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  */
 
 namespace Opensoft\Rollout;
@@ -183,7 +183,7 @@ class Feature
      */
     private function isUserInPercentage(RolloutUserInterface $user)
     {
-        return crc32($user->getRolloutIdentifier()) % 100 < $this->percentage;
+        return abs(crc32($user->getRolloutIdentifier()) % 100) < $this->percentage;
     }
 
     /**
@@ -210,4 +210,4 @@ class Feature
 
         return false;
     }
-} 
+}
