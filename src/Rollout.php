@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  */
 
 namespace Opensoft\Rollout;
@@ -223,6 +223,54 @@ class Rollout
     }
 
     /**
+     * Configures and saves a feature.
+     *
+     * @param Feature $feature    The feature to be configured
+     * @param bool    $activate   Should users and groups be activated or deactivated (it has no effect on percentage)
+     * @param array   $users      A list of objects implementing RolloutUserInterface
+     * @param array   $groups     A list of group names
+     * @param int     $percentage New percentage
+     *
+     * @return array An array which holds users and groups who have been effectively modified
+     */
+    public function configure(Feature $feature, $activate, array $users, array $groups, $percentage = null)
+    {
+        $modified = array('users' => array(), 'groups' => array());
+
+        // Percentage
+        if (null !== $percentage) {
+            $feature->setPercentage($percentage);
+        }
+
+        // Users
+        foreach ($users as $user) {
+            $method = 'removeUser';
+            if (true === $activate) {
+                $method = 'addUser';
+            }
+            if (true === call_user_func(array($feature, $method), $user)) {
+                $modified['users'][] = $user->getRolloutIdentifier();
+            }
+        }
+
+        // Groups
+        foreach ($groups as $group) {
+            $method = 'removeGroup';
+            if (true === $activate) {
+                $method = 'addGroup';
+            }
+            if (true === call_user_func(array($feature, $method), $group)) {
+                $modified['groups'][] = $group;
+            }
+        }
+
+        // Save feature
+        $this->save($feature);
+
+        return $modified;
+    }
+
+    /**
      * @param Feature $feature
      */
     private function save(Feature $feature)
@@ -236,4 +284,4 @@ class Rollout
         }
         $this->storage->set($this->featuresKey(), implode(',', $features));
     }
-} 
+}
