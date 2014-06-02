@@ -29,14 +29,14 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->rollout->activateGroup('chat', 'fivesonly');
 
         // the feature is active for users for which the callback evaluates as true
-        $this->assertTrue($this->rollout->isActive('chat', new User(5)));
+        $this->assertTrue($this->rollout->isActive('chat', new RolloutUser(5)));
 
         // is not active for users for which the callback evalutates to false
-        $this->assertFalse($this->rollout->isActive('chat', new User(1)));
+        $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(1)));
 
         // is not active if a group is found in storage, but not defined in the rollout
         $this->rollout->activateGroup('chat', 'fake');
-        $this->assertFalse($this->rollout->isActive('chat', new User(1)));
+        $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(1)));
     }
 
     public function testDefaultAllGroup()
@@ -45,7 +45,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->rollout->activateGroup('chat', 'all');
 
         // evaluates to true no matter what
-        $this->assertTrue($this->rollout->isActive('chat', new User(0)));
+        $this->assertTrue($this->rollout->isActive('chat', new RolloutUser(0)));
     }
 
     public function testDeactivatingAGroup()
@@ -58,7 +58,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->rollout->deactivateGroup('chat', 'some');
 
         // deactivates the rules for that group
-        $this->assertFalse($this->rollout->isActive('chat', new User(10)));
+        $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(10)));
 
         // leaves the other groups active
         $this->assertContains('fivesonly', $this->rollout->get('chat')->getGroups());
@@ -70,19 +70,19 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->rollout->defineGroup('fivesonly', function(RolloutUserInterface $user) { return $user->getRolloutIdentifier() === 5; });
         $this->rollout->activateGroup('chat', 'all');
         $this->rollout->activateGroup('chat', 'fivesonly');
-        $this->rollout->activateUser('chat', new User(51));
+        $this->rollout->activateUser('chat', new RolloutUser(51));
         $this->rollout->activatePercentage('chat', 100);
         $this->rollout->activate('chat');
         $this->rollout->deactivate('chat');
 
         // it should remove all of the groups
-        $this->assertFalse($this->rollout->isActive('chat', new User(0)));
+        $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(0)));
 
         // it should remove all of the users
-        $this->assertFalse($this->rollout->isActive('chat', new User(51)));
+        $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(51)));
 
         // it should remove the percentage
-        $this->assertFalse($this->rollout->isActive('chat', new User(24)));
+        $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(24)));
 
         // it should be removed globally
         $this->assertFalse($this->rollout->isActive('chat'));
@@ -90,36 +90,36 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
 
     public function testActivatingASpecificUser()
     {
-        $this->rollout->activateUser('chat', new User(42));
+        $this->rollout->activateUser('chat', new RolloutUser(42));
 
         // it should be active for that user
-        $this->assertTrue($this->rollout->isActive('chat', new User(42)));
+        $this->assertTrue($this->rollout->isActive('chat', new RolloutUser(42)));
 
         // it remains inactive for other users
-        $this->assertFalse($this->rollout->isActive('chat', new User(24)));
+        $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(24)));
     }
 
     public function testActivatingASpecificUserWithStringId()
     {
-        $this->rollout->activateUser('chat', new User('user-72'));
+        $this->rollout->activateUser('chat', new RolloutUser('user-72'));
 
         // it should be active for that user
-        $this->assertTrue($this->rollout->isActive('chat', new User('user-72')));
+        $this->assertTrue($this->rollout->isActive('chat', new RolloutUser('user-72')));
 
         // it remains inactive for other users
-        $this->assertFalse($this->rollout->isActive('chat', new User('user-12')));
+        $this->assertFalse($this->rollout->isActive('chat', new RolloutUser('user-12')));
     }
 
     public function testDeactivatingASpecificUser()
     {
-        $this->rollout->activateUser('chat', new User(42));
-        $this->rollout->activateUser('chat', new User(4242));
-        $this->rollout->activateUser('chat', new User(24));
-        $this->rollout->deactivateUser('chat', new User(42));
-        $this->rollout->deactivateUser('chat', new User('4242'));
+        $this->rollout->activateUser('chat', new RolloutUser(42));
+        $this->rollout->activateUser('chat', new RolloutUser(4242));
+        $this->rollout->activateUser('chat', new RolloutUser(24));
+        $this->rollout->deactivateUser('chat', new RolloutUser(42));
+        $this->rollout->deactivateUser('chat', new RolloutUser('4242'));
 
         // that user should no longer be active
-        $this->assertFalse($this->rollout->isActive('chat', new User(42)));
+        $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(42)));
 
         // it remains active for other users
         $users = $this->rollout->get('chat')->getUsers();
@@ -141,7 +141,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
 
         $activated = array();
         foreach (range(1, 120) as $id) {
-            if ($this->rollout->isActive('chat', new User($id))) {
+            if ($this->rollout->isActive('chat', new RolloutUser($id))) {
                 $activated[] = true;
             }
         }
@@ -157,7 +157,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
 
         $activated = array();
         foreach (range(1, 200) as $id) {
-            if ($this->rollout->isActive('chat', new User($id))) {
+            if ($this->rollout->isActive('chat', new RolloutUser($id))) {
                 $activated[] = true;
             }
         }
@@ -173,7 +173,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
 
         $activated = array();
         foreach (range(1, 100) as $id) {
-            if ($this->rollout->isActive('chat', new User($id))) {
+            if ($this->rollout->isActive('chat', new RolloutUser($id))) {
                 $activated[] = true;
             }
         }
@@ -189,10 +189,10 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->rollout->activateGroup('chat', 'admins');
 
         // the feature is active for users for which the block is true
-        $this->assertTrue($this->rollout->isActive('chat', new User(5)));
+        $this->assertTrue($this->rollout->isActive('chat', new RolloutUser(5)));
 
         // the feature is not active for users for which the block evaluates to false
-        $this->assertFalse($this->rollout->isActive('chat', new User(1)));
+        $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(1)));
     }
 
     public function testDeactivatingThePercentageOfUsers()
@@ -201,7 +201,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->rollout->deactivatePercentage('chat');
 
         // it becomes inactive for all users
-        $this->assertFalse($this->rollout->isActive('chat', new User(24)));
+        $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(24)));
     }
 
     public function testDeactivatingTheFeatureGlobally()
@@ -231,7 +231,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->rollout->activateGroup('chat', 'caretakers');
         $this->rollout->activateGroup('chat', 'greeters');
         $this->rollout->activate('signup');
-        $this->rollout->activateUser('chat', new User(42));
+        $this->rollout->activateUser('chat', new RolloutUser(42));
 
         // it should return the feature object
         $feature = $this->rollout->get('chat');
@@ -252,7 +252,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
 /**
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class User implements RolloutUserInterface
+class RolloutUser implements RolloutUserInterface
 {
     /**
      * @var string
