@@ -41,6 +41,7 @@ There are a number of different storage implementations for where the configurat
 
 * ArrayStorage - default storage, not persistent
 * DoctrineCacheStorageAdapter - requires `doctrine/cache`
+* PDOStorageAdapter - persistent with a simple \PDO object
 
 The storage implementation must implement the `Storage\StorageInterface`'s methods.
 
