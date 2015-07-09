@@ -11,7 +11,7 @@ class PDOStorageAdapter implements StorageInterface
 {
     const STMT_SELECT = 'SELECT settings FROM :table WHERE name = :key';
     const STMT_INSERT = 'INSERT INTO :table (name, settings) VALUES (:key, :value)';
-    const STMT_UPDATE = 'UPDATE :table SET settings = :value WHERE key = :key';
+    const STMT_UPDATE = 'UPDATE :table SET settings = :value WHERE name = :key';
 
     /**
      * @var \PDO
