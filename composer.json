@@ -1,7 +1,7 @@
 {
     "name": "opensoft/rollout",
-    "description": "Feature flippers for PHP",
-    "keywords": ["feature", "flag", "toggle", "rollout", "flipper"],
+    "description": "Feature switches or flags for PHP",
+    "keywords": ["feature", "flag", "toggle", "rollout", "flipper", "switches"],
     "license": "MIT",
     "authors": [
         {
