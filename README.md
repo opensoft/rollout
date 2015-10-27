@@ -40,10 +40,15 @@ Storage
 There are a number of different storage implementations for where the configuration for the rollout is stored.
 
 * ArrayStorage - default storage, not persistent
-* DoctrineCacheStorageAdapter - requires `doctrine/cache`
-* PDOStorageAdapter - persistent with a simple \PDO object
+* DoctrineCacheStorageAdapter - requires [doctrine/cache][doctrine-cache]
+* PDOStorageAdapter - persistent using [PDO][pdo]
+* RedisStorageAdapter - persistent using [Redis][redis]
 
-The storage implementation must implement the `Storage\StorageInterface`'s methods.
+[doctrine-cache]: https://packagist.org/packages/doctrine/cache
+[pdo]: http://php.net/pdo
+[redis]: http://redis.io
+
+All storage adapters must implement `Opensoft\Rollout\Storage\StorageInterface`.
 
 Groups
 ------
