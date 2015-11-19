@@ -201,7 +201,7 @@ class Rollout
 
         $features = $this->features();
         if (in_array($feature, $features)) {
-            $features = array_diff($features, [$feature]);
+            $features = array_diff($features, array($feature));
         }
         $this->storage->set($this->featuresKey(), implode(',', $features));
     }
