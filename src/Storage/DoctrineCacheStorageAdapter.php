@@ -44,4 +44,12 @@ class DoctrineCacheStorageAdapter implements StorageInterface
     {
         $this->cache->save($key, $value);
     }
+
+    /**
+     * @param string $key
+     */
+    public function remove($key)
+    {
+        $this->cache->delete($key);
+    }
 } 

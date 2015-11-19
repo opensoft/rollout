@@ -246,6 +246,16 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($feature->getUsers());
         $this->assertEquals(100, $feature->getPercentage());
     }
+
+    public function testRemove()
+    {
+        $this->rollout->activate('signup');
+        $feature = $this->rollout->get('signup');
+        $this->assertEquals('signup', $feature->getName());
+
+        $this->rollout->remove('signup');
+        $this->assertNotContains('signup', $this->rollout->features());
+    }
 }
 
 

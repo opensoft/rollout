@@ -130,6 +130,17 @@ $rollout->deactivate('chat');
 
 You may wish to disable features programmatically if monitoring tools detect unusually high error rates for example.
 
+Remove a Feature (added in 2.0.0)
+---------------------------------
+
+After a feature becomes mainstream or a failed experiment, you may want to remove the feature definition from rollout.
+
+```php
+$rollout->remove('chat');
+```
+
+Note: If there is still code referencing the feature, it will be recreated with default settings.
+
 Symfony2 Bundle
 ---------------
 

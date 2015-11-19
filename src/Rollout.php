@@ -45,7 +45,6 @@ class Rollout
         }
     }
 
-
     /**
      * @param string $feature
      */
@@ -189,6 +188,22 @@ class Rollout
         }
 
         return $f;
+    }
+
+    /**
+     * Remove a feature definition from rollout
+     *
+     * @param string $feature
+     */
+    public function remove($feature)
+    {
+        $this->storage->remove($this->key($feature));
+
+        $features = $this->features();
+        if (in_array($feature, $features)) {
+            $features = array_diff($features, [$feature]);
+        }
+        $this->storage->set($this->featuresKey(), implode(',', $features));
     }
 
     /**

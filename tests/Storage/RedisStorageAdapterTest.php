@@ -76,6 +76,17 @@ class RedisStorageAdapterTest extends \PHPUnit_Framework_TestCase
         $adapter->set('key', 'value');
     }
 
+    public function testRemove()
+    {
+        $this->redis->expects($this->once())
+            ->method('hdel')
+            ->with(RedisStorageAdapter::DEFAULT_GROUP, 'key');
+
+        $adapter = new RedisStorageAdapter($this->redis);
+
+        $adapter->remove('key');
+    }
+
     public function testSetWithCustomGroup()
     {
         $this->redis->expects($this->once())
@@ -92,4 +103,5 @@ interface mockRedis
 {
     public function hget($key, $field);
     public function hset($key, $field, $value);
+    public function hdel($key, $field);
 }

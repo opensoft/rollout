@@ -33,4 +33,13 @@ class ArrayStorage implements StorageInterface
         $this->storage[$key] = $value;
     }
 
+    /**
+     * @param string $key
+     */
+    public function remove($key)
+    {
+        if (isset($this->storage[$key])) {
+            unset($this->storage[$key]);
+        }
+    }
 } 

@@ -29,6 +29,23 @@ class PDOStorageAdapterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('success', $result);
     }
 
+    public function testRemove()
+    {
+        $statement = $this->mockPDOStatement();
+
+        $statement->expects($this->once())
+            ->method('bindParam')
+            ->with('key', 'test');
+
+        $statement->expects($this->once())
+            ->method('execute');
+
+        $pdo = $this->mockPDO($this->prepareSQL(PDOStorageAdapter::STMT_DELETE), $statement);
+
+        $adapter = new PDOStorageAdapter($pdo);
+        $adapter->remove('test');
+    }
+
     public function testTableName()
     {
         $statement = $this->mockPDOStatement();

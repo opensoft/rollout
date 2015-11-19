@@ -22,4 +22,10 @@ interface StorageInterface
      * @return void
      */
     public function set($key, $value);
+
+    /**
+     * @param string $key
+     * @return void
+     */
+    public function remove($key);
 } 

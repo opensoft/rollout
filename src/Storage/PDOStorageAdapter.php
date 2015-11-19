@@ -12,6 +12,7 @@ class PDOStorageAdapter implements StorageInterface
     const STMT_SELECT = 'SELECT settings FROM :table WHERE name = :key';
     const STMT_INSERT = 'INSERT INTO :table (name, settings) VALUES (:key, :value)';
     const STMT_UPDATE = 'UPDATE :table SET settings = :value WHERE name = :key';
+    const STMT_DELETE = 'DELETE FROM :table WHERE name = :key';
 
     /**
      * @var \PDO
@@ -66,6 +67,17 @@ class PDOStorageAdapter implements StorageInterface
         $statement->bindParam('key', $key);
         $statement->bindParam('value', $value);
 
+        $statement->execute();
+    }
+
+    /**
+     * @param string $key
+     */
+    public function remove($key)
+    {
+        $statement = $this->pdoConnection->prepare($this->getSQLStatement(self::STMT_DELETE));
+
+        $statement->bindParam('key', $key);
         $statement->execute();
     }
 

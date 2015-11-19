@@ -60,4 +60,12 @@ class RedisStorageAdapter implements StorageInterface
     {
         $this->redis->hset($this->group, $key, json_encode($value));
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function remove($key)
+    {
+        $this->redis->hdel($this->group, $key);
+    }
 }
