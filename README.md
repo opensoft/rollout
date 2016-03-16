@@ -43,10 +43,12 @@ There are a number of different storage implementations for where the configurat
 * DoctrineCacheStorageAdapter - requires [doctrine/cache][doctrine-cache]
 * PDOStorageAdapter - persistent using [PDO][pdo]
 * RedisStorageAdapter - persistent using [Redis][redis]
+* MongoDBStorageAdapter - persistent using [Mongo][mongo]
 
 [doctrine-cache]: https://packagist.org/packages/doctrine/cache
 [pdo]: http://php.net/pdo
 [redis]: http://redis.io
+[mongo]: http://mongodb.org
 
 All storage adapters must implement `Opensoft\Rollout\Storage\StorageInterface`.
 
