@@ -119,15 +119,16 @@ class Rollout
     }
 
     /**
-     * @param string      $feature
+     * @param string $feature
      * @param RolloutUserInterface|null $user
+     * @param array $requestParameters
      * @return bool
      */
-    public function isActive($feature, RolloutUserInterface $user = null)
+    public function isActive($feature, RolloutUserInterface $user = null, array $requestParameters = array())
     {
         $feature = $this->get($feature);
 
-        return $feature ? $feature->isActive($this, $user) : false;
+        return $feature ? $feature->isActive($this, $user, $requestParameters) : false;
     }
 
     /**
@@ -151,6 +152,31 @@ class Rollout
         $feature = $this->get($feature);
         if ($feature) {
             $feature->setPercentage(0);
+            $this->save($feature);
+        }
+    }
+
+    /**
+     * @param string $feature
+     * @param string $requestParam
+     */
+    public function activateRequestParam($feature, $requestParam)
+    {
+        $feature = $this->get($feature);
+        if ($feature) {
+            $feature->setRequestParam($requestParam);
+            $this->save($feature);
+        }
+    }
+
+    /**
+     * @param string $feature
+     */
+    public function deactivateRequestParam($feature)
+    {
+        $feature = $this->get($feature);
+        if ($feature) {
+            $feature->setRequestParam('');
             $this->save($feature);
         }
     }

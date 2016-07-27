@@ -72,6 +72,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->rollout->activateGroup('chat', 'fivesonly');
         $this->rollout->activateUser('chat', new RolloutUser(51));
         $this->rollout->activatePercentage('chat', 100);
+        $this->rollout->activateRequestParam('chat', 'FF_facebookIntegration=1');
         $this->rollout->activate('chat');
         $this->rollout->deactivate('chat');
 
@@ -83,6 +84,9 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
 
         // it should remove the percentage
         $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(24)));
+
+        // it should remove the request param
+        $this->assertFalse($this->rollout->isActive('chat', null, array('FF_facebookIntegration', true)));
 
         // it should be removed globally
         $this->assertFalse($this->rollout->isActive('chat'));
@@ -204,6 +208,25 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->rollout->isActive('chat', new RolloutUser(24)));
     }
 
+    public function testActivatingRequestParam()
+    {
+        $this->rollout->activateRequestParam('chat', 'FF_facebookIntegration=1');
+
+        $this->assertTrue($this->rollout->isActive('chat', null, ['FF_facebookIntegration' => true]));
+
+        $this->assertFalse($this->rollout->isActive('chat', null, ['FF_anotherFeature' => true]));
+    }
+
+    public function testDeactivatingRequestParam()
+    {
+        $this->rollout->activateRequestParam('chat', 'FF_facebookIntegration=1');
+        $this->rollout->deactivateRequestParam('chat');
+
+        $this->assertFalse($this->rollout->isActive('chat', null, ['FF_facebookIntegration' => true]));
+
+        $this->assertFalse($this->rollout->isActive('chat', null, ['FF_anotherFeature' => true]));
+    }
+
     public function testDeactivatingTheFeatureGlobally()
     {
         $this->rollout->activate('chat');
@@ -232,6 +255,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->rollout->activateGroup('chat', 'greeters');
         $this->rollout->activate('signup');
         $this->rollout->activateUser('chat', new RolloutUser(42));
+        $this->rollout->activateRequestParam('chat', 'FF_facebookIntegration=1');
 
         // it should return the feature object
         $feature = $this->rollout->get('chat');
@@ -239,12 +263,21 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('greeters', $feature->getGroups());
         $this->assertEquals(10, $feature->getPercentage());
         $this->assertContains(42, $feature->getUsers());
-        $this->assertEquals(array('groups' => array('caretakers', 'greeters'), 'percentage' => 10, 'users' => array('42')), $feature->toArray());
+        $this->assertEquals(
+            array(
+                'groups' => array('caretakers', 'greeters'),
+                'percentage' => 10,
+                'users' => array('42'),
+                'requestParam' => 'FF_facebookIntegration=1'
+            ),
+            $feature->toArray()
+        );
 
         $feature = $this->rollout->get('signup');
         $this->assertEmpty($feature->getGroups());
         $this->assertEmpty($feature->getUsers());
         $this->assertEquals(100, $feature->getPercentage());
+        $this->assertEmpty($feature->getRequestParam());
     }
 
     public function testRemove()
