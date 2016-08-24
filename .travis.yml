@@ -1,13 +1,15 @@
 language: php
 
 php:
-  - 5.3
-  - 5.4
-  - 5.5
+  - 5.6
+  - 7.0
+  - nightly
   - hhvm
 
-before_script:
-  - composer install -n
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: nightly
+    - php: hhvm
 
-script:
-  - vendor/bin/phpunit
+install: composer install -n
