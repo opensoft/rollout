@@ -11,7 +11,7 @@ namespace Opensoft\Rollout;
 class Feature
 {
     /**
-     * @var array
+     * @var string
      */
     private $name;
 
@@ -31,6 +31,11 @@ class Feature
     private $percentage = 0;
 
     /**
+     * @var string|null
+     */
+    private $requestParam;
+
+    /**
      * @param string $name
      * @param string|null $settings
      */
@@ -38,7 +43,13 @@ class Feature
     {
         $this->name = $name;
         if ($settings) {
-            list($rawPercentage, $rawUsers, $rawGroups) = explode('|', $settings);
+            $settings = explode('|', $settings);
+            if (count($settings) == 4) {
+                $rawRequestParam = array_pop($settings);
+                $this->requestParam = $rawRequestParam;
+            }
+
+            list($rawPercentage, $rawUsers, $rawGroups) = $settings;
             $this->percentage = (int) $rawPercentage;
             $this->users = !empty($rawUsers) ? explode(',', $rawUsers) : array();
             $this->groups = !empty($rawGroups) ? explode(',', $rawGroups) : array();
@@ -79,7 +90,8 @@ class Feature
         return implode('|', array(
             $this->percentage,
             implode(',', $this->users),
-            implode(',', $this->groups)
+            implode(',', $this->groups),
+            $this->requestParam,
         ));
     }
 
@@ -140,6 +152,22 @@ class Feature
     }
 
     /**
+     * @return string|null
+     */
+    public function getRequestParam()
+    {
+        return $this->requestParam;
+    }
+
+    /**
+     * @param string|null $requestParam
+     */
+    public function setRequestParam($requestParam)
+    {
+        $this->requestParam = $requestParam;
+    }
+
+    /**
      * Clear the feature of all configuration
      */
     public function clear()
@@ -147,6 +175,7 @@ class Feature
         $this->groups = array();
         $this->users = array();
         $this->percentage = 0;
+        $this->requestParam = '';
     }
 
     /**
@@ -154,15 +183,19 @@ class Feature
      *
      * @param Rollout $rollout
      * @param RolloutUserInterface|null $user
+     * @param array $requestParameters
      * @return bool
      */
-    public function isActive(Rollout $rollout, RolloutUserInterface $user = null)
+    public function isActive(Rollout $rollout, RolloutUserInterface $user = null, array $requestParameters = array())
     {
         if (null == $user) {
-            return $this->percentage == 100;
+            return $this->isParamInRequestParams($requestParameters) || $this->percentage == 100;
         }
 
-        return $this->isUserInPercentage($user) || $this->isUserInActiveUsers($user) || $this->isUserInActiveGroup($user, $rollout);
+        return $this->isParamInRequestParams($requestParameters) ||
+            $this->isUserInPercentage($user) ||
+            $this->isUserInActiveUsers($user) ||
+            $this->isUserInActiveGroup($user, $rollout);
     }
 
     /**
@@ -174,7 +207,22 @@ class Feature
             'percentage' => $this->percentage,
             'groups' => $this->groups,
             'users' => $this->users,
+            'requestParam' => $this->requestParam,
         );
+    }
+
+    /**
+     * @param array $requestParameters
+     * @return bool
+     */
+    private function isParamInRequestParams(array $requestParameters)
+    {
+        $param = explode('=', $this->requestParam);
+        $key = array_shift($param);
+        $value = array_shift($param);
+
+        return $key && array_key_exists($key, $requestParameters) &&
+            (empty($value) || $requestParameters[$key] == $value);
     }
 
     /**
