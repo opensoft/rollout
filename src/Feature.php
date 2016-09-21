@@ -71,6 +71,14 @@ class Feature
      */
     public function setPercentage($percentage)
     {
+        if ($percentage < 0 || $percentage > 100) {
+            throw new \OutOfRangeException(
+                sprintf(
+                    'Percentage must be comprised between 0 and 100 - percentage="%d"',
+                    $percentage
+                )
+            );
+        }
         $this->percentage = $percentage;
     }
 
@@ -100,9 +108,12 @@ class Feature
      */
     public function addUser(RolloutUserInterface $user)
     {
-        if (!in_array($user, $this->users)) {
+        if (array_search($user->getRolloutIdentifier(), $this->users) === false) {
             $this->users[] = $user->getRolloutIdentifier();
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -112,7 +123,10 @@ class Feature
     {
         if (($key = array_search($user->getRolloutIdentifier(), $this->users)) !== false) {
             unset($this->users[$key]);
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -130,7 +144,10 @@ class Feature
     {
         if (!in_array($group, $this->groups)) {
             $this->groups[] = $group;
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -140,7 +157,10 @@ class Feature
     {
         if (($key = array_search($group, $this->groups)) !== false) {
             unset($this->groups[$key]);
+            return true;
         }
+
+        return false;
     }
 
     /**
