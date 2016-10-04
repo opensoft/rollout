@@ -146,6 +146,11 @@ Symfony2 Bundle
 
 A Symfony2 bundle is available to integrate rollout into Symfony2 projects.  It can be found at http://github.com/opensoft/OpensoftRolloutBundle.
 
+Zend Framework 2 Module
+-----------------------
+
+A Zend Framework 2 module is availabile to intergrate rollout into Zend Framwork 2 projects. It can be found at https://github.com/adlogix/zf2-opensoft-rollout.
+
 Implementations in other languages
 ----------------------------------
 
