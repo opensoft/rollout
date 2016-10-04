@@ -100,7 +100,7 @@ class Feature
      */
     public function addUser(RolloutUserInterface $user)
     {
-        if (!in_array($user, $this->users)) {
+        if (!in_array($user->getRolloutIdentifier(), $this->users)) {
             $this->users[] = $user->getRolloutIdentifier();
         }
     }
