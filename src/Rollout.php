@@ -183,10 +183,10 @@ class Rollout
 
     /**
      * @param string $group
-     * @param RolloutUserInterface $user
+     * @param RolloutUserInterface|null $user
      * @return bool
      */
-    public function isActiveInGroup($group, RolloutUserInterface $user)
+    public function isActiveInGroup($group, RolloutUserInterface $user = null)
     {
         if (!isset($this->groups[$group])) {
             return false;

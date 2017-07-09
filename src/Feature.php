@@ -189,13 +189,15 @@ class Feature
     public function isActive(Rollout $rollout, RolloutUserInterface $user = null, array $requestParameters = array())
     {
         if (null == $user) {
-            return $this->isParamInRequestParams($requestParameters) || $this->percentage == 100;
+            return $this->isParamInRequestParams($requestParameters)
+                || $this->percentage == 100
+                || $this->isInActiveGroup($rollout);
         }
 
         return $this->isParamInRequestParams($requestParameters) ||
             $this->isUserInPercentage($user) ||
             $this->isUserInActiveUsers($user) ||
-            $this->isUserInActiveGroup($user, $rollout);
+            $this->isInActiveGroup($rollout, $user);
     }
 
     /**
@@ -244,11 +246,11 @@ class Feature
     }
 
     /**
-     * @param RolloutUserInterface $user
      * @param Rollout $rollout
+     * @param RolloutUserInterface|null $user
      * @return bool
      */
-    private function isUserInActiveGroup(RolloutUserInterface $user, Rollout $rollout)
+    private function isInActiveGroup(Rollout $rollout, RolloutUserInterface $user = null)
     {
         foreach ($this->groups as $group) {
             if ($rollout->isActiveInGroup($group, $user)) {

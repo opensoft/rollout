@@ -66,7 +66,11 @@ $rollout->activateGroup('chat', 'all');
 You may also want to define your own groups.  We have one for caretakers:
 
 ```php
-$rollout->defineGroup('caretakers', function(RolloutUserInterface $user) {
+$rollout->defineGroup('caretakers', function(RolloutUserInterface $user = null) {
+  if (null === $user) {
+    return false;
+  }
+
   return $user->isCaretaker(); // boolean
 });
 ```
