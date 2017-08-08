@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  */
 
 namespace Opensoft\Rollout;
@@ -266,7 +266,7 @@ class Rollout
     /**
      * @param Feature $feature
      */
-    private function save(Feature $feature)
+    protected function save(Feature $feature)
     {
         $name = $feature->getName();
         $this->storage->set($this->key($name), $feature->serialize());
@@ -277,4 +277,4 @@ class Rollout
         }
         $this->storage->set($this->featuresKey(), implode(',', $features));
     }
-} 
+}
