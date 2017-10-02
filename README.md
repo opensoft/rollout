@@ -166,4 +166,4 @@ Implementations in other languages
 Copyright
 ---------
 
-Copyright © 2010 James Golick, BitLove, Inc. See LICENSE for details.
+Copyright © 2017 James Golick, BitLove, Inc. See LICENSE for details.
