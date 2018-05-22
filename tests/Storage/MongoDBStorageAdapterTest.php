@@ -4,6 +4,9 @@ namespace Opensoft\Tests\Storage;
 
 use Opensoft\Rollout\Storage\MongoDBStorageAdapter;
 
+/**
+ * @requires extension mongo
+ */
 class MongoDBStorageAdapterTest extends \PHPUnit_Framework_TestCase
 {
     private $mongo;
