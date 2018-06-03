@@ -233,6 +233,41 @@ class Rollout
     }
 
     /**
+     * Update feature specific data
+     *
+     * @example $rollout->setFeatureData('chat', array(
+     *  'description'  => 'foo',
+     *  'release_date' => 'bar',
+     *  'whatever'     => 'baz'
+     * ));
+     *
+     * @param string $feature
+     * @param array  $data
+     */
+    public function setFeatureData($feature, array $data)
+    {
+        $feature = $this->get($feature);
+        if ($feature) {
+            $feature->setData(array_merge($feature->getData(), $data));
+            $this->save($feature);
+        }
+    }
+
+    /**
+     * Clear all feature data
+     *
+     * @param  string $feature
+     */
+    public function clearFeatureData($feature)
+    {
+        $feature = $this->get($feature);
+        if ($feature) {
+            $feature->setData(array());
+            $this->save($feature);
+        }
+    }
+
+    /**
      * @return array
      */
     public function features()
