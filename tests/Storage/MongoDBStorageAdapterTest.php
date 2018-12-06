@@ -66,7 +66,15 @@ class MongoDBStorageAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function mockCollection()
     {
-        return $this->createMock('MongoCollection', ['find', 'findOne', 'update', 'remove'], [], '', false);
+        return $this->getMockBuilder('MongoCollection')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
+                'find', 
+                'findOne', 
+                'update', 
+                'remove',
+            ))
+            ->getMock();
 
     }
 }
