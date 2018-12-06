@@ -25,4 +25,15 @@ class FeatureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['fivesonly'], $feature->getGroups());
         $this->assertEquals('FF_facebookIntegration=1', $feature->getRequestParam());
     }
+
+    public function testParseDataSettingsFormat()
+    {
+        $feature = new Feature('chat', '100|4,12|fivesonly|FF_facebookIntegration=1|{"description":"foo","release_date":"bar"}');
+
+        $this->assertEquals(100, $feature->getPercentage());
+        $this->assertEquals([4, 12], $feature->getUsers());
+        $this->assertEquals(['fivesonly'], $feature->getGroups());
+        $this->assertEquals('FF_facebookIntegration=1', $feature->getRequestParam());
+        $this->assertEquals('{"description":"foo","release_date":"bar"}', json_encode($feature->getData()));
+    }
 }

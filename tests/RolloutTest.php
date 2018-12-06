@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  */
 
 use Opensoft\Rollout\Rollout;
@@ -256,6 +256,11 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->rollout->activate('signup');
         $this->rollout->activateUser('chat', new RolloutUser(42));
         $this->rollout->activateRequestParam('chat', 'FF_facebookIntegration=1');
+        $this->rollout->setFeatureData('chat', array(
+            'description'  => 'foo',
+            'release_date' => 'bar',
+            'whatever'     => 'baz'
+        ));
 
         // it should return the feature object
         $feature = $this->rollout->get('chat');
@@ -268,7 +273,12 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
                 'groups' => array('caretakers', 'greeters'),
                 'percentage' => 10,
                 'users' => array('42'),
-                'requestParam' => 'FF_facebookIntegration=1'
+                'requestParam' => 'FF_facebookIntegration=1',
+                'data' => array(
+                    'description'  => 'foo',
+                    'release_date' => 'bar',
+                    'whatever'     => 'baz'
+                )
             ),
             $feature->toArray()
         );
@@ -278,6 +288,7 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($feature->getUsers());
         $this->assertEquals(100, $feature->getPercentage());
         $this->assertEmpty($feature->getRequestParam());
+        $this->assertEmpty($feature->getData());
     }
 
     public function testRemove()
@@ -288,6 +299,33 @@ class RolloutTest extends \PHPUnit_Framework_TestCase
 
         $this->rollout->remove('signup');
         $this->assertNotContains('signup', $this->rollout->features());
+    }
+
+    public function testClearFeatureData()
+    {
+        $this->rollout->activate('signup');
+        $feature = $this->rollout->get('signup');
+        $this->assertEquals('signup', $feature->getName());
+
+        $this->rollout->setFeatureData('signup', array(
+            'description'  => 'foo',
+            'release_date' => 'bar',
+            'whatever'     => 'baz'
+        ));
+
+        $feature = $this->rollout->get('signup');
+
+        $this->assertEquals(array(
+            'description'  => 'foo',
+            'release_date' => 'bar',
+            'whatever'     => 'baz'
+        ), $feature->getData());
+
+        $this->rollout->clearFeatureData('signup');
+
+        $feature = $this->rollout->get('signup');
+
+        $this->assertEmpty($feature->getData());
     }
 }
 

@@ -36,6 +36,11 @@ class Feature
     private $requestParam;
 
     /**
+     * @var array
+     */
+    private $data = array();
+
+    /**
      * @param string $name
      * @param string|null $settings
      */
@@ -44,9 +49,16 @@ class Feature
         $this->name = $name;
         if ($settings) {
             $settings = explode('|', $settings);
-            if (count($settings) == 4) {
-                $rawRequestParam = array_pop($settings);
+
+            if (isset($settings[3])) {
+                $rawRequestParam = $settings[3];
                 $this->requestParam = $rawRequestParam;
+            }
+
+            //We can not trust the list function because of backwords compatibility
+            if (isset($settings[4])) {
+                $rawData = $settings[4];
+                $this->data = !empty($rawData)? json_decode($rawData, true) : array();
             }
 
             list($rawPercentage, $rawUsers, $rawGroups) = $settings;
@@ -92,6 +104,7 @@ class Feature
             implode(',', $this->users),
             implode(',', $this->groups),
             $this->requestParam,
+            json_encode($this->data)
         ));
     }
 
@@ -168,6 +181,22 @@ class Feature
     }
 
     /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+    }
+
+    /**
      * Clear the feature of all configuration
      */
     public function clear()
@@ -176,6 +205,7 @@ class Feature
         $this->users = array();
         $this->percentage = 0;
         $this->requestParam = '';
+        $this->data = array();
     }
 
     /**
@@ -210,6 +240,7 @@ class Feature
             'groups' => $this->groups,
             'users' => $this->users,
             'requestParam' => $this->requestParam,
+            'data'=> $this->data
         );
     }
 
