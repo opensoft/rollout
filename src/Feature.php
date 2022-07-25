@@ -264,7 +264,8 @@ class Feature
      */
     private function isUserInPercentage(RolloutUserInterface $user)
     {
-        return abs(crc32($user->getRolloutIdentifier()) % 100) < $this->percentage;
+        // To be updated
+        return false;
     }
 
     /**
