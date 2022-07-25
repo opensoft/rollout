@@ -216,8 +216,12 @@ class Feature
      * @param array $requestParameters
      * @return bool
      */
-    public function isActive(Rollout $rollout, RolloutUserInterface $user = null, array $requestParameters = array())
-    {
+    public function isActive(
+        Rollout $rollout,
+        RolloutUserInterface $user = null,
+        array $users = array(),
+        array $requestParameters = array()
+    ) {
         if (null == $user) {
             return $this->isParamInRequestParams($requestParameters)
                 || $this->percentage == 100
@@ -225,7 +229,7 @@ class Feature
         }
 
         return $this->isParamInRequestParams($requestParameters) ||
-            $this->isUserInPercentage($user) ||
+            $this->isUserInPercentage($user, $users) ||
             $this->isUserInActiveUsers($user) ||
             $this->isInActiveGroup($rollout, $user);
     }
