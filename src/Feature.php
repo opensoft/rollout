@@ -262,10 +262,20 @@ class Feature
      * @param RolloutUserInterface $user
      * @return bool
      */
-    private function isUserInPercentage(RolloutUserInterface $user)
+    private function isUserInPercentage(RolloutUserInterface $user, array $users)
     {
-        // To be updated
-        return false;
+        if ($this->percentage === 100) {
+            return true;
+        }
+
+        if ($this->percentage === 0) {
+            return false;
+        }
+
+        $limit = ceil(($this->percentage / 100) * count($users));
+        $users = array_slice($users, $limit);
+
+        return in_array($user->getRolloutIdentifier(), $users);
     }
 
     /**
