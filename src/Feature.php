@@ -277,9 +277,14 @@ class Feature
         }
 
         $limit = ceil(($this->percentage / 100) * count($users));
-        $users = array_slice($users, $limit);
+        $users = array_slice($users, 0, $limit);
+        foreach ($users as $userData) {
+            if ($userData['slug'] === $user->getRolloutIdentifier()) {
+                return true;
+            }
+        }
 
-        return in_array($user->getRolloutIdentifier(), $users);
+        return false;
     }
 
     /**
