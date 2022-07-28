@@ -305,7 +305,7 @@ class Rollout
     /**
      * @param Feature $feature
      */
-    protected function save(Feature $feature)
+    public function save(Feature $feature)
     {
         $name = $feature->getName();
         $this->storage->set($this->key($name), $feature->serialize());
