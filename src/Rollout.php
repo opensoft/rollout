@@ -124,11 +124,15 @@ class Rollout
      * @param array $requestParameters
      * @return bool
      */
-    public function isActive($feature, RolloutUserInterface $user = null, array $requestParameters = array())
-    {
+    public function isActive(
+        $feature,
+        RolloutUserInterface $user = null,
+        array $users = array(),
+        array $requestParameters = array()
+    ) {
         $feature = $this->get($feature);
 
-        return $feature ? $feature->isActive($this, $user, $requestParameters) : false;
+        return $feature && $feature->isActive($this, $user, $users, $requestParameters);
     }
 
     /**
@@ -301,7 +305,7 @@ class Rollout
     /**
      * @param Feature $feature
      */
-    protected function save(Feature $feature)
+    public function save(Feature $feature)
     {
         $name = $feature->getName();
         $this->storage->set($this->key($name), $feature->serialize());

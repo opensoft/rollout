@@ -216,8 +216,12 @@ class Feature
      * @param array $requestParameters
      * @return bool
      */
-    public function isActive(Rollout $rollout, RolloutUserInterface $user = null, array $requestParameters = array())
-    {
+    public function isActive(
+        Rollout $rollout,
+        RolloutUserInterface $user = null,
+        array $users = array(),
+        array $requestParameters = array()
+    ) {
         if (null == $user) {
             return $this->isParamInRequestParams($requestParameters)
                 || $this->percentage == 100
@@ -225,7 +229,7 @@ class Feature
         }
 
         return $this->isParamInRequestParams($requestParameters) ||
-            $this->isUserInPercentage($user) ||
+            $this->isUserInPercentage($user, $users) ||
             $this->isUserInActiveUsers($user) ||
             $this->isInActiveGroup($rollout, $user);
     }
@@ -262,9 +266,25 @@ class Feature
      * @param RolloutUserInterface $user
      * @return bool
      */
-    private function isUserInPercentage(RolloutUserInterface $user)
+    private function isUserInPercentage(RolloutUserInterface $user, array $users)
     {
-        return abs(crc32($user->getRolloutIdentifier()) % 100) < $this->percentage;
+        if ($this->percentage === 100) {
+            return true;
+        }
+
+        if ($this->percentage === 0) {
+            return false;
+        }
+
+        $limit = ceil(($this->percentage / 100) * count($users));
+        $users = array_slice($users, 0, $limit);
+        foreach ($users as $userData) {
+            if ($userData['slug'] === $user->getRolloutIdentifier()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
