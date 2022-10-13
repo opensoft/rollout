@@ -29,7 +29,7 @@ class Rollout
     {
         $this->storage = $storage;
         $this->groups = array(
-            'all' => function(RolloutUserInterface $user) { return $user !== null; }
+            'all' => function(?RolloutUserInterface $user) { return $user !== null; }
         );
     }
 
